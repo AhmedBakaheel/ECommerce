@@ -2,10 +2,8 @@
 using ECommerce.Domain.Interfaces;
 using ECommerce.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace ECommerce.Persistence.Repositories
@@ -21,8 +19,7 @@ namespace ECommerce.Persistence.Repositories
 
         public async Task AddAsync(Product entity)
         {
-            await _context.Products.AddAsync(entity);
-            await _context.SaveChangesAsync();
+            await _context.Products.AddAsync(entity);           
         }
 
         public async Task DeleteAsync(int id)
@@ -30,8 +27,7 @@ namespace ECommerce.Persistence.Repositories
             var product = await _context.Products.FindAsync(id);
             if (product != null)
             {
-                _context.Products.Remove(product);
-                await _context.SaveChangesAsync();
+                _context.Products.Remove(product);                
             }
         }
 
@@ -47,13 +43,15 @@ namespace ECommerce.Persistence.Repositories
 
         public async Task UpdateAsync(Product entity)
         {
-            _context.Entry(entity).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _context.Entry(entity).State = EntityState.Modified;            
         }
 
         public async Task<IEnumerable<Product>> GetProductsByCategoryAsync(int categoryId)
         {
-            return await _context.Products.Where(p => p.CategoryId == categoryId).ToListAsync();
+            return await _context.Products
+                .Where(p => p.CategoryId == categoryId)
+                .Include(p => p.Category)
+                .ToListAsync();
         }
 
         public async Task<IEnumerable<Product>> GetProductsInStockAsync()
