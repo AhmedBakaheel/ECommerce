@@ -1,6 +1,4 @@
-﻿// ECommerce.Persistence/UnitOfWork/UnitOfWork.cs
-
-using ECommerce.Domain.Interfaces;
+﻿using ECommerce.Domain.Interfaces;
 using ECommerce.Domain.UnitOfWork;
 using ECommerce.Persistence.Data;
 using ECommerce.Persistence.Repositories;
@@ -10,15 +8,16 @@ namespace ECommerce.Persistence.UnitOfWork
 {
     public class UnitOfWork : IUnitOfWork
     {
-        private readonly ApplicationDbContext _context;       
-        public IProductRepository Products { get; }
-        public IOrderRepository Orders { get; }
+        private readonly ApplicationDbContext _context;
 
         public UnitOfWork(ApplicationDbContext context)
         {
-            _context = context;           
-            Products = new ProductRepository(_context);
-            Orders = new OrderRepository(_context);
+            _context = context;
+        }
+
+        public IRepository<TEntity> GetRepository<TEntity>() where TEntity : class
+        {           
+            return new Repository<TEntity>(_context);
         }
 
         public async Task<int> SaveChangesAsync()

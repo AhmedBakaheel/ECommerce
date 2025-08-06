@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 namespace ECommerce.Domain.UnitOfWork
 {
     public interface IUnitOfWork
-    {
-        IProductRepository Products { get; }
-        IOrderRepository Orders { get; }
+    {     
+        IRepository<TEntity> GetRepository<TEntity>() where TEntity : class;
         Task<int> SaveChangesAsync();
     }
 }

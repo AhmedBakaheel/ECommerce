@@ -1,4 +1,5 @@
 using ECommerce.Application.Mappings;
+using ECommerce.Application.Features.Products.Queries;
 using ECommerce.Domain.UnitOfWork;
 using ECommerce.Persistence.Data;
 using ECommerce.Persistence.UnitOfWork;
@@ -16,9 +17,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-
-builder.Services.AddMediatR(typeof(MappingProfiles).Assembly);
-
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAllProductsQuery).Assembly));
 builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly);
 
 var app = builder.Build();
@@ -27,6 +26,10 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+    app.MapGet("/", context => {
+        context.Response.Redirect("/swagger");
+        return Task.CompletedTask;
+    });
 }
 
 app.UseHttpsRedirection();
