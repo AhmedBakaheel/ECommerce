@@ -1,11 +1,10 @@
 ﻿using ECommerce.Application.DTOs.Products;
-using ECommerce.Application.Features.Products.Commands;
-using ECommerce.Application.Features.Products.Queries;
 using ECommerce.Domain.Entities;
 using ECommerce.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ECommerce.Application.Features.Shared.Commands;
+using ECommerce.Application.Features.Shared.Queries;
 
 namespace ECommerce.WebAPI.Controllers
 {
@@ -23,15 +22,15 @@ namespace ECommerce.WebAPI.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var query = new GetAllProductsQuery();
+           
+            var query = new GetAllQuery<ProductDto>();
             var products = await _mediator.Send(query);
             return Ok(products);
         }
         [HttpPost]
-        [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateProductDto dto)
         {
-            var command = new CreateCommand<Product, ProductDto> { Dto = dto };
+            var command = new CreateCommand<Product, CreateProductDto, ProductDto> { Dto = dto };
             var createdProduct = await _mediator.Send(command);
             return CreatedAtAction(nameof(GetAll), new { id = createdProduct.Id }, createdProduct);
         }

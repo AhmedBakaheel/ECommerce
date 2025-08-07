@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using ECommerce.Domain.Interfaces;
 using ECommerce.Domain.UnitOfWork;
 using MediatR;
 using System.Threading;
@@ -7,14 +6,13 @@ using System.Threading.Tasks;
 
 namespace ECommerce.Application.Features.Shared.Commands
 {
-   
-    public class CreateCommand<TEntity, TDto> : IRequest<TDto> where TEntity : class
+    public class CreateCommand<TEntity, TCreateDto, TReadDto> : IRequest<TReadDto>
+        where TEntity : class where TCreateDto : class where TReadDto : class
     {
-        public TDto Dto { get; set; }
+        public TCreateDto Dto { get; set; }
     }
-
-    public class CreateCommandHandler<TEntity, TDto> : IRequestHandler<CreateCommand<TEntity, TDto>, TDto>
-        where TEntity : class where TDto : class
+    public class CreateCommandHandler<TEntity, TCreateDto, TReadDto> : IRequestHandler<CreateCommand<TEntity, TCreateDto, TReadDto>, TReadDto>
+        where TEntity : class where TCreateDto : class where TReadDto : class
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
@@ -24,15 +22,14 @@ namespace ECommerce.Application.Features.Shared.Commands
             _unitOfWork = unitOfWork;
             _mapper = mapper;
         }
-
-        public async Task<TDto> Handle(CreateCommand<TEntity, TDto> request, CancellationToken cancellationToken)
+        public async Task<TReadDto> Handle(CreateCommand<TEntity, TCreateDto, TReadDto> request, CancellationToken cancellationToken)
         {
             var entity = _mapper.Map<TEntity>(request.Dto);
 
             await _unitOfWork.GetRepository<TEntity>().AddAsync(entity);
             await _unitOfWork.SaveChangesAsync();
 
-            return _mapper.Map<TDto>(entity);
+            return _mapper.Map<TReadDto>(entity);
         }
     }
 }

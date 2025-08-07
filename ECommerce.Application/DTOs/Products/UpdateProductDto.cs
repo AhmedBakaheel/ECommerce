@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ECommerce.Application.DTOs.Products
+﻿namespace ECommerce.Application.DTOs.Products
 {
-    public class CreateProductDto : ProductBaseDto
+    public class UpdateProductDto : ProductBaseDto
     {
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
