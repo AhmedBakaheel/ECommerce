@@ -1,17 +1,14 @@
 // ECommerce.WebAPI/Program.cs
 using ECommerce.Application.Mappings;
-using ECommerce.Application.Features.Queries;
-using ECommerce.Domain.UnitOfWork;
 using ECommerce.Persistence.Data;
 using ECommerce.Persistence.UnitOfWork;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ECommerce.Application.DTOs.Products;
-using ECommerce.Application.Features.Shared.Commands;
 using ECommerce.Domain.Interfaces;
-using ECommerce.Domain.Entities;
 using ECommerce.Persistence.Repositories;
-using System.Collections.Generic;
+using ECommerce.Domain.UnitOfWork;
+using System.Reflection;
+using ECommerce.Application.Configuration; //  √ﬂœ „‰ ≈÷«›… Â–« «·‹ using
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,16 +19,8 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Add MediatR (This is the corrected registration that should solve all previous issues)
-builder.Services.AddMediatR(cfg =>
-{
-    // Â–« «·”ÿ— Ì„”Õ ﬂ· «· Ã„Ì⁄«  –«  «·’·… ÊÌÃ» √‰ Ì”Ã· ﬂ· «·„⁄«·Ã«   ·ﬁ«∆Ì«
-    cfg.RegisterServicesFromAssemblies(
-        typeof(ProductProfile).Assembly,
-        typeof(ApplicationDbContext).Assembly,
-        typeof(GetAllQueryHandler<,>).Assembly // Â–« «·”ÿ— Ì÷„‰ „”Õ «· Ã„Ì⁄ «·–Ì ÌÕ ÊÌ ⁄·Ï «·„⁄«·Ã« 
-    );
-});
+// Add MediatR (This is the new, simple call)
+builder.Services.AddApplicationServices();
 
 // Add AutoMapper
 builder.Services.AddAutoMapper(typeof(ProductProfile).Assembly);

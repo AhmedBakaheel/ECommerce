@@ -1,5 +1,4 @@
-﻿// ECommerce.WebAPI/Controllers/CategoriesController.cs
-using ECommerce.Application.DTOs.Categories;
+﻿using ECommerce.Application.DTOs.Categories;
 using ECommerce.Application.Features.Queries;
 using ECommerce.Application.Features.Shared.Commands;
 using ECommerce.Domain.Entities;
@@ -54,7 +53,6 @@ namespace ECommerce.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            // تم تعديل هذا السطر ليستخدم object initializer بدلاً من constructor
             var command = new DeleteCommand<Category> { Id = id };
             await _mediator.Send(command);
             return NoContent();
