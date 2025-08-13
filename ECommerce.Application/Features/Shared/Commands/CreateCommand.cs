@@ -9,7 +9,7 @@ namespace ECommerce.Application.Features.Shared.Commands
     public class CreateCommand<TEntity, TCreateDto, TReadDto> : IRequest<TReadDto>
         where TEntity : class where TCreateDto : class where TReadDto : class
     {
-        public TCreateDto Dto { get; set; }
+        public required TCreateDto Dto { get; set; }
     }
     public class CreateCommandHandler<TEntity, TCreateDto, TReadDto> : IRequestHandler<CreateCommand<TEntity, TCreateDto, TReadDto>, TReadDto>
         where TEntity : class where TCreateDto : class where TReadDto : class

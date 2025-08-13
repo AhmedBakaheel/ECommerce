@@ -4,7 +4,7 @@ using ECommerce.Domain.Exceptions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using ECommerce.Application.Features.Shared.Commands;
-using ECommerce.Application.Features.Shared.Queries;
+using ECommerce.Application.Features.Queries;
 
 namespace ECommerce.WebAPI.Controllers
 {
